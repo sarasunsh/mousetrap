@@ -1,0 +1,29 @@
+import { LOAD_CURRENT_MOUSE } from '../constants';
+
+// ACTION-CREATORS--------------------------------------------------------
+export const loadSingleMouse = function(fetchedMouse){
+    return {
+        type: LOAD_CURRENT_MOUSE,
+        loadedMouse: fetchedMouse
+    }
+}
+
+// DISPATCHERS/THUNKS --------------------------------------------------------
+export const fetchMouseFromServer = function(mouseID){
+    const thunk = function(dispatch) {
+        fetch(`/api/mice/${mouseID}`)
+        .then(res => res.json())
+        .then(fetchedMouse => dispatch(loadSingleMouse(fetchedMouse)))
+        .catch(err => console.log(err))
+    }
+    return thunk;
+}
+
+
+// REDUCER --------------------------------------------------------
+export default function singleMouseReducer(state={}, action){
+    switch (action.type){
+        case LOAD_CURRENT_MOUSE: return action.loadedMouse
+        default: return state
+    }
+}

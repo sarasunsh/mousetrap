@@ -1,0 +1,51 @@
+'use strict';
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import store from './store';
+import { Provider } from 'react-redux';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+
+import Sidebar from './components/Sidebar';
+import App from './components/App';
+import AllMiceContainer from './components/AllMice/AllMiceContainer';
+import SingleMouseContainer from './components/SingleMouse/SingleMouseContainer';
+import NewMouseFormContainer from './components/NewMouseForm/NewMouseFormContainer';
+import ExperimentFormContainer from './components/Experiment/ExperimentFormContainer';
+
+import { fetchMiceFromServer } from './ducks/allMice';
+import { fetchMouseFromServer } from './ducks/singleMouse';
+import { fetchArmsFromServer } from './ducks/experiment';
+
+// onEnter prompts ----------------------------------------------------
+const onMiceEnter = function () {
+  const thunk = fetchMiceFromServer();
+  store.dispatch(thunk);
+};
+
+const onSingleMouseEnter = function (nextRouterState) {
+  const mouseId = nextRouterState.params.mouseId;
+  const thunk = fetchMouseFromServer(mouseId);
+  store.dispatch(thunk);
+};
+
+const onExperimentEnter = function (nextRouterState) {
+  const thunk = fetchArmsFromServer();
+  store.dispatch(thunk);
+};
+
+// React-Router--------------------------------------------------------
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={hashHistory}>
+      <Route path='/' component={App}>
+        <Route path="mice" component={AllMiceContainer} onEnter={onMiceEnter}/>
+        <Route path="mice/:mouseId" component={SingleMouseContainer} onEnter={onSingleMouseEnter} />
+        <Route path="addmouse" component={NewMouseFormContainer} />
+        <Route path="experiment" component={ExperimentFormContainer} onEnter={onExperimentEnter}/>
+        <IndexRoute component={AllMiceContainer} onEnter={onMiceEnter}/>
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('app')
+);
