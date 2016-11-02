@@ -15,7 +15,7 @@ conditionalPsqlCreate () {
 
 # create database
 
-database="juke"
+database="mousetrap"
 conditionalPsqlCreate \
 "pg_database WHERE datname = '$database'" \
 "DATABASE $database" \

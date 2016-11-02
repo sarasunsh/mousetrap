@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export default class ExperimentForm extends React.Component {
+export default class ExperimentPage extends React.Component {
     render () {
         console.log('component', this.props)
         return (

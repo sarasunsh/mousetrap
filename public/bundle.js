@@ -82,7 +82,7 @@
 	
 	var _NewMouseFormContainer2 = _interopRequireDefault(_NewMouseFormContainer);
 	
-	var _ExperimentFormContainer = __webpack_require__(281);
+	var _ExperimentFormContainer = __webpack_require__(278);
 	
 	var _ExperimentFormContainer2 = _interopRequireDefault(_ExperimentFormContainer);
 	
@@ -30418,9 +30418,57 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 278 */,
-/* 279 */,
-/* 280 */
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(200);
+	
+	var _ExperimentForm = __webpack_require__(279);
+	
+	var _ExperimentForm2 = _interopRequireDefault(_ExperimentForm);
+	
+	var _FormDecorator = __webpack_require__(280);
+	
+	var _FormDecorator2 = _interopRequireDefault(_FormDecorator);
+	
+	var _experiment = __webpack_require__(192);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	    console.log('mapstate', state.exptArms);
+	    return {
+	        exptArms: state.exptArms,
+	        test: 'yay'
+	    };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        createArm: function createArm(newArm) {
+	            var action = (0, _experiment.addNewArm)(newArm);
+	            dispatch(action);
+	        }
+	    };
+	};
+	
+	var StatefulExperimentForm = (0, _FormDecorator2.default)(_ExperimentForm2.default);
+	
+	var ExperimentFormContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StatefulExperimentForm);
+	exports.default = ExperimentFormContainer;
+
+/***/ },
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30536,7 +30584,7 @@
 	exports.default = ExperimentForm;
 
 /***/ },
-/* 281 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30551,14 +30599,6 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(200);
-	
-	var _ExperimentForm = __webpack_require__(280);
-	
-	var _ExperimentForm2 = _interopRequireDefault(_ExperimentForm);
-	
-	var _experiment = __webpack_require__(192);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30567,7 +30607,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	// Here the HOC takes the 'dumb' form component and gives it a local state to track the title and then event handlers for when the experiment arm details are changed OR when the form is submitted. It also passes down the addNewArm action creator so the new arm can be sent to the store after submission
+	// Here the HOC takes the 'dumb' form component and gives it a local state to track the title and then event handlers for when the experiment arm details are changed OR when the form is submitted. It also passes down the createArm action creator that it receives from the container so the new arm can be sent to the store after submission. NOTE: this function does not have direct access to the store; it needs to be given dispatch and props by the container
 	function ExperimentFormDecorator(ExperimentFormComponent) {
 	    return function (_React$Component) {
 	        _inherits(StatefulExperimentForm, _React$Component);
@@ -30642,7 +30682,8 @@
 	                    genotype: this.state.genotype,
 	                    treatment: this.state.treatment,
 	                    goal: this.state.goal,
-	                    invalid: this.state.invalid
+	                    invalid: this.state.invalid,
+	                    exptArms: this.props.exptArms
 	                });
 	            }
 	        }]);
@@ -30651,26 +30692,7 @@
 	    }(_react2.default.Component);
 	}
 	
-	// const mapStateToProps = function(state){
-	//     console.log('mapstate', state.exptArms)
-	//     return {
-	//         exptArms: state.exptArms,
-	//         test: 'do you see this'
-	//     }
-	// }
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        createArm: function createArm(newArm) {
-	            var action = (0, _experiment.addNewArm)(newArm);
-	            dispatch(action);
-	        }
-	    };
-	};
-	
-	var StatefulExperimentForm = ExperimentFormDecorator(_ExperimentForm2.default);
-	var ExperimentFormContainer = (0, _reactRedux.connect)(null, mapDispatchToProps)(StatefulExperimentForm);
-	exports.default = ExperimentFormContainer;
+	exports.default = ExperimentFormDecorator;
 
 /***/ }
 /******/ ]);
