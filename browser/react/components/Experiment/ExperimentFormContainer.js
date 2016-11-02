@@ -7,10 +7,8 @@ import ExperimentFormDecorator from './FormDecorator';
 import { addNewArm } from '../../ducks/experiment';
 
 const mapStateToProps = function(state){
-    console.log('mapstate', state.exptArms)
     return {
-        exptArms: state.exptArms,
-        test: 'yay'
+        exptArms: state.exptArms
     }
 }
 

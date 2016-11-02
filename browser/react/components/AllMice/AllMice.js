@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 
 export default class AllMice extends React.Component {
     render () {
-        console.log('I LOVE YOU', this.props.mice)
         return (
             <div>
                 <h3>List of mice in the colony</h3>

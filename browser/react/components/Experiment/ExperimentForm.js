@@ -1,11 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router';
-//THIS WILL BE CHANGED
+
+
 export default class ExperimentForm extends React.Component {
     render () {
         console.log('component', this.props)
         return (
             <div className='well'>
+                <div>
+                    <h4>Experimental Design</h4>
+                    {this.props.exptArms.map( arm => (
+                        <span key={arm.id}>
+                            <h5>{arm.id}: {arm.genotype}+{arm.treatment}</h5>
+                        </span>
+                        )
+                    )}
+                </div><br></br>
                 <form className='form-horizontal' onSubmit={this.props.handleSubmit}>
                     <legend>Add Another Arm</legend>
                     <label>Description</label>
