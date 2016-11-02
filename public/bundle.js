@@ -30058,7 +30058,6 @@
 	    _createClass(AllMice, [{
 	        key: 'render',
 	        value: function render() {
-	            console.log('I LOVE YOU', this.props.mice);
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -30446,10 +30445,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	    console.log('mapstate', state.exptArms);
 	    return {
-	        exptArms: state.exptArms,
-	        test: 'yay'
+	        exptArms: state.exptArms
 	    };
 	};
 	
@@ -30493,7 +30490,6 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	//THIS WILL BE CHANGED
 	var ExperimentForm = function (_React$Component) {
 	    _inherits(ExperimentForm, _React$Component);
 	
@@ -30510,6 +30506,31 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'well' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'h4',
+	                        null,
+	                        'Experimental Design'
+	                    ),
+	                    this.props.exptArms.map(function (arm) {
+	                        return _react2.default.createElement(
+	                            'span',
+	                            { key: arm.id },
+	                            _react2.default.createElement(
+	                                'h5',
+	                                null,
+	                                arm.id,
+	                                ': ',
+	                                arm.genotype,
+	                                '+',
+	                                arm.treatment
+	                            )
+	                        );
+	                    })
+	                ),
+	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(
 	                    'form',
 	                    { className: 'form-horizontal', onSubmit: this.props.handleSubmit },
@@ -30593,6 +30614,8 @@
 	    value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
@@ -30608,6 +30631,14 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// Here the HOC takes the 'dumb' form component and gives it a local state to track the title and then event handlers for when the experiment arm details are changed OR when the form is submitted. It also passes down the createArm action creator that it receives from the container so the new arm can be sent to the store after submission. NOTE: this function does not have direct access to the store; it needs to be given dispatch and props by the container
+	
+	// ExperimentFormComponent is the "wrapped class" and its instances are wrapped components
+	// StatefulExperimentForm is the "wrapper class" and its instances are wrapper components
+	// The function itself is the HOC
+	
+	// A wrapper component usually handles events on behalf of the wrapped component. It maintains some state and communicates with the wrapped component by passing state values and callbacks to the wrapped component via its props.
+	
+	// If it is to be compatible with arbitrary components, a higher-order component must provide a way to control the interface between the wrapper and wrapped components to avoid name clash and map the data provided by the wrapper to the props expected by the wrapped component.
 	function ExperimentFormDecorator(ExperimentFormComponent) {
 	    return function (_React$Component) {
 	        _inherits(StatefulExperimentForm, _React$Component);
@@ -30673,7 +30704,8 @@
 	        }, {
 	            key: 'render',
 	            value: function render() {
-	                return _react2.default.createElement(ExperimentFormComponent, {
+	                // Be careful with deleting or editing important props, you should probably namespace your Higher Order props not to break the WrappedComponent.
+	                var newProps = {
 	                    handleDescriptionChange: this.handleDescriptionChange,
 	                    handleGenotypeChange: this.handleGenotypeChange,
 	                    handleTreatmentChange: this.handleTreatmentChange,
@@ -30682,9 +30714,10 @@
 	                    genotype: this.state.genotype,
 	                    treatment: this.state.treatment,
 	                    goal: this.state.goal,
-	                    invalid: this.state.invalid,
-	                    exptArms: this.props.exptArms
-	                });
+	                    invalid: this.state.invalid
+	                };
+	
+	                return _react2.default.createElement(ExperimentFormComponent, _extends({}, this.props, newProps));
 	            }
 	        }]);
 	
