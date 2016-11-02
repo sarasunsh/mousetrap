@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from'react-redux';
 import ExperimentForm from './ExperimentForm';
 import ExperimentFormDecorator from './FormDecorator';
-import { addNewArm } from '../../ducks/experiment';
+import { addNewArm, removeArm } from '../../ducks/experiment';
 
 const mapStateToProps = function(state){
     return {
@@ -17,6 +17,11 @@ const mapDispatchToProps = function (dispatch) {
     createArm: function(newArm) {
         const action = addNewArm(newArm);
         dispatch(action);
+    },
+    deleteArm: function(deletedArm) {
+        console.log(deletedArm)
+        const action = removeArm(deletedArm)
+        dispatch(action)
     }
   }
 };

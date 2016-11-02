@@ -22534,6 +22534,7 @@
 	var LOAD_ALL_MICE = exports.LOAD_ALL_MICE = 'LOAD_ALL_MICE';
 	var LOAD_CURRENT_MOUSE = exports.LOAD_CURRENT_MOUSE = 'LOAD_CURRENT_MOUSE';
 	var ADD_NEW_ARM = exports.ADD_NEW_ARM = 'ADD_NEW_ARM';
+	var DELETE_ARM = exports.DELETE_ARM = 'DELETE_ARM';
 	var LOAD_ALL_ARMS = exports.LOAD_ALL_ARMS = 'LOAD_ALL_ARMS';
 
 /***/ },
@@ -22594,7 +22595,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.addPlaylist = exports.addNewArm = exports.fetchArmsFromServer = exports.receiveNewArm = exports.loadAllArms = undefined;
+	exports.removeArm = exports.addNewArm = exports.fetchArmsFromServer = exports.removeDeletedArm = exports.receiveNewArm = exports.loadAllArms = undefined;
 	exports.default = experimentArmReducer;
 	
 	var _constants = __webpack_require__(190);
@@ -22613,6 +22614,13 @@
 	    return {
 	        type: _constants.ADD_NEW_ARM,
 	        newArm: newArm
+	    };
+	};
+	
+	var removeDeletedArm = exports.removeDeletedArm = function removeDeletedArm(deletedArm) {
+	    return {
+	        type: _constants.DELETE_ARM,
+	        deletedArm: deletedArm
 	    };
 	};
 	
@@ -22637,35 +22645,48 @@
 	            headers = new window.Headers({
 	            'Content-Type': 'application/json'
 	        });
-	
 	        return fetch('/api/experiment', { method: method, body: body, headers: headers }).then(function (res) {
 	            return res.json();
 	        }).then(function (newArm) {
-	            console.log('arm created', newArm);
 	            var action = receiveNewArm(newArm);
-	            console.log('action created');
 	            dispatch(action);
 	        });
 	    };
 	    return thunk;
 	};
 	
-	var addPlaylist = exports.addPlaylist = function addPlaylist(data) {
-	    return function (dispatch) {
+	var removeArm = exports.removeArm = function removeArm(data) {
+	    var thunk = function thunk(dispatch) {
 	        var body = JSON.stringify(data),
-	            method = 'POST',
+	            method = 'DELETE',
 	            headers = new window.Headers({
 	            'Content-Type': 'application/json'
 	        });
-	
-	        return fetch('/api/playlists', { method: method, body: body, headers: headers }).then(function (res) {
+	        return fetch('/api/experiment', { method: method, body: body, headers: headers }).then(function (res) {
 	            return res.json();
-	        }).then(function (playlist) {
-	            dispatch(receiveNewPlaylist(playlist));
-	            browserHistory.push('/playlists/' + playlist.id);
+	        }).then(function (deletedArm) {
+	            var action = removeDeletedArm(deletedArm);
+	            dispatch(action);
 	        });
 	    };
+	    return thunk;
 	};
+	
+	// export const addPlaylist = data =>
+	//   dispatch => {
+	//     const body = JSON.stringify(data),
+	//           method = 'POST',
+	//           headers = new window.Headers({
+	//             'Content-Type': 'application/json'
+	//           });
+	
+	//     return fetch('/api/playlists', { method, body, headers })
+	//       .then(res => res.json())
+	//       .then(playlist => {
+	//         dispatch(receiveNewPlaylist(playlist));
+	//         browserHistory.push(`/playlists/${playlist.id}`);
+	//       });
+	//   };
 	
 	// REDUCER --------------------------------------------------------
 	function experimentArmReducer() {
@@ -22677,6 +22698,10 @@
 	            return action.loadedArms;
 	        case _constants.ADD_NEW_ARM:
 	            return [].concat(_toConsumableArray(state), [action.newArm]);
+	        case _constants.DELETE_ARM:
+	            return state.filter(function (arm) {
+	                return arm.id !== action.deletedArm.id;
+	            });
 	        default:
 	            return state;
 	    }
@@ -30455,6 +30480,11 @@
 	        createArm: function createArm(newArm) {
 	            var action = (0, _experiment.addNewArm)(newArm);
 	            dispatch(action);
+	        },
+	        deleteArm: function deleteArm(deletedArm) {
+	            console.log(deletedArm);
+	            var action = (0, _experiment.removeArm)(deletedArm);
+	            dispatch(action);
 	        }
 	    };
 	};
@@ -30502,6 +30532,8 @@
 	    _createClass(ExperimentForm, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+	
 	            console.log('component', this.props);
 	            return _react2.default.createElement(
 	                'div',
@@ -30516,7 +30548,7 @@
 	                    ),
 	                    this.props.exptArms.map(function (arm) {
 	                        return _react2.default.createElement(
-	                            'span',
+	                            'div',
 	                            { key: arm.id },
 	                            _react2.default.createElement(
 	                                'h5',
@@ -30526,6 +30558,13 @@
 	                                arm.genotype,
 	                                '+',
 	                                arm.treatment
+	                            ),
+	                            _react2.default.createElement(
+	                                'button',
+	                                {
+	                                    className: 'btn btn-default',
+	                                    onClick: _this2.props.deleteArm },
+	                                _react2.default.createElement('span', { className: 'glyphicon glyphicon-remove' })
 	                            )
 	                        );
 	                    })

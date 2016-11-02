@@ -1,4 +1,4 @@
-import { LOAD_ALL_ARMS, ADD_NEW_ARM } from '../constants';
+import { LOAD_ALL_ARMS, ADD_NEW_ARM, DELETE_ARM } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
 export const loadAllArms = function(fetchedArms){
@@ -12,6 +12,13 @@ export const receiveNewArm = function(newArm){
     return {
         type: ADD_NEW_ARM,
         newArm: newArm
+    }
+}
+
+export const removeDeletedArm = function(deletedArm){
+    return {
+        type: DELETE_ARM,
+        deletedArm: deletedArm
     }
 }
 
@@ -33,43 +40,59 @@ export const addNewArm = function(data) {
             headers = new window.Headers({
                 'Content-Type': 'application/json'
             });
-
-
         return fetch('/api/experiment', {method, body, headers})
         .then(res => {
             return res.json()
         })
         .then(newArm => {
-            console.log('arm created', newArm)
             const action = receiveNewArm(newArm);
-            console.log('action created')
             dispatch(action)
         })
     }
     return thunk;
 }
 
-export const addPlaylist = data =>
-  dispatch => {
-    const body = JSON.stringify(data),
-          method = 'POST',
-          headers = new window.Headers({
-            'Content-Type': 'application/json'
-          });
+export const removeArm = function(data) {
+    const thunk = function(dispatch){
+        const body = JSON.stringify(data),
+            method = 'DELETE',
+            headers = new window.Headers({
+                'Content-Type': 'application/json'
+            });
+        return fetch('/api/experiment', {method, body, headers})
+        .then(res => {
+            return res.json()
+        })
+        .then(deletedArm => {
+            const action = removeDeletedArm(deletedArm);
+            dispatch(action)
+        })
+    }
+    return thunk;
+}
 
-    return fetch('/api/playlists', { method, body, headers })
-      .then(res => res.json())
-      .then(playlist => {
-        dispatch(receiveNewPlaylist(playlist));
-        browserHistory.push(`/playlists/${playlist.id}`);
-      });
-  };
+// export const addPlaylist = data =>
+//   dispatch => {
+//     const body = JSON.stringify(data),
+//           method = 'POST',
+//           headers = new window.Headers({
+//             'Content-Type': 'application/json'
+//           });
+
+//     return fetch('/api/playlists', { method, body, headers })
+//       .then(res => res.json())
+//       .then(playlist => {
+//         dispatch(receiveNewPlaylist(playlist));
+//         browserHistory.push(`/playlists/${playlist.id}`);
+//       });
+//   };
 
 // REDUCER --------------------------------------------------------
 export default function experimentArmReducer(state=[], action){
     switch (action.type){
         case LOAD_ALL_ARMS: return  action.loadedArms
         case ADD_NEW_ARM: return [...state, action.newArm]
+        case DELETE_ARM: return state.filter(arm => arm.id !== action.deletedArm.id)
         default: return state
     }
 }

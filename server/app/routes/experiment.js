@@ -23,5 +23,14 @@ router.post('/', function (req, res, next) {
         })
     })
     .catch(next);
+});
 
+router.delete('/', function (req, res, next) {
+    Arm.destroy({
+        where: {
+            id: req.body.id
+        }
+    })
+    .then( deletedArm => res.json(deletedArm))
+    .catch(next);
 });

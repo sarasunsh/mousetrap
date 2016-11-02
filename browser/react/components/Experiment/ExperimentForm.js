@@ -10,9 +10,14 @@ export default class ExperimentForm extends React.Component {
                 <div>
                     <h4>Experimental Design</h4>
                     {this.props.exptArms.map( arm => (
-                        <span key={arm.id}>
+                        <div key={arm.id}>
                             <h5>{arm.id}: {arm.genotype}+{arm.treatment}</h5>
-                        </span>
+                            <button
+                                className="btn btn-default"
+                                onClick={this.props.deleteArm}>
+                                <span className="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
                         )
                     )}
                 </div><br></br>
