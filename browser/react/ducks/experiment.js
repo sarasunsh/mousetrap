@@ -1,4 +1,6 @@
-import { LOAD_ALL_ARMS, ADD_NEW_ARM } from '../constants';
+import axios from 'axios';
+
+import { LOAD_ALL_ARMS, ADD_NEW_ARM, DELETE_ARM } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
 export const loadAllArms = function(fetchedArms){
@@ -15,12 +17,18 @@ export const receiveNewArm = function(newArm){
     }
 }
 
+export const removeDeletedArm = function(deletedArm){
+    return {
+        type: DELETE_ARM,
+        deletedArm: deletedArm
+    }
+}
+
 // DISPATCHERS/THUNKS --------------------------------------------------------
 export const fetchArmsFromServer = function(){
     const thunk = function(dispatch) {
-        fetch('/api/experiment')
-        .then(res => res.json())
-        .then(fetchedArms => dispatch(loadAllArms(fetchedArms)))
+        axios.get('/api/experiment')
+        .then(res => dispatch(loadAllArms(res.data)))
         .catch(err => console.log(err))
     }
     return thunk;
@@ -28,48 +36,35 @@ export const fetchArmsFromServer = function(){
 
 export const addNewArm = function(data) {
     const thunk = function(dispatch){
-        const body = JSON.stringify(data),
-            method = 'POST',
-            headers = new window.Headers({
-                'Content-Type': 'application/json'
-            });
-
-
-        return fetch('/api/experiment', {method, body, headers})
+        axios.post('/api/experiment', data)
         .then(res => {
-            return res.json()
-        })
-        .then(newArm => {
-            console.log('arm created', newArm)
-            const action = receiveNewArm(newArm);
-            console.log('action created')
+            const action = receiveNewArm(res.data);
             dispatch(action)
         })
     }
     return thunk;
 }
 
-export const addPlaylist = data =>
-  dispatch => {
-    const body = JSON.stringify(data),
-          method = 'POST',
-          headers = new window.Headers({
-            'Content-Type': 'application/json'
-          });
+export const removeArm = function(id) {
+    console.log('removeArm', id)
+    const thunk = function(dispatch){
+        axios.delete(`/api/experiment/${id}`)
+        .then(res => {
+            const action = removeDeletedArm(res.data)
+            dispatch(action)
+        })
+        .catch(err => console.error(`Removing story: ${id} unsuccesful`, err))
+    }
+    return thunk;
+}
 
-    return fetch('/api/playlists', { method, body, headers })
-      .then(res => res.json())
-      .then(playlist => {
-        dispatch(receiveNewPlaylist(playlist));
-        browserHistory.push(`/playlists/${playlist.id}`);
-      });
-  };
 
 // REDUCER --------------------------------------------------------
 export default function experimentArmReducer(state=[], action){
     switch (action.type){
         case LOAD_ALL_ARMS: return  action.loadedArms
         case ADD_NEW_ARM: return [...state, action.newArm]
+        case DELETE_ARM: return state.filter(arm => arm.id !== action.deletedArm)
         default: return state
     }
 }
