@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 
 export default class ExperimentForm extends React.Component {
     render () {
-        console.log('component', this.props)
         return (
             <div className='well'>
                 <div>
@@ -14,7 +13,7 @@ export default class ExperimentForm extends React.Component {
                             <h5>{arm.id}: {arm.genotype}+{arm.treatment}</h5>
                             <button
                                 className="btn btn-default"
-                                onClick={this.props.deleteArm}>
+                                onClick={() => this.props.handleDelete(arm.id)}>
                                 <span className="glyphicon glyphicon-remove"></span>
                             </button>
                         </div>

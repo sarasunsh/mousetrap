@@ -25,10 +25,10 @@ router.post('/', function (req, res, next) {
     .catch(next);
 });
 
-router.delete('/', function (req, res, next) {
+router.delete('/:id', function (req, res, next) {
     Arm.destroy({
         where: {
-            id: req.body.id
+            id: +req.params.id
         }
     })
     .then( deletedArm => res.json(deletedArm))

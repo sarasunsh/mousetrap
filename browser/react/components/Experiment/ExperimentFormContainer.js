@@ -18,9 +18,8 @@ const mapDispatchToProps = function (dispatch) {
         const action = addNewArm(newArm);
         dispatch(action);
     },
-    deleteArm: function(deletedArm) {
-        console.log(deletedArm)
-        const action = removeArm(deletedArm)
+    deleteArm: function(deletedArmID) {
+        const action = removeArm(deletedArmID)
         dispatch(action)
     }
   }
