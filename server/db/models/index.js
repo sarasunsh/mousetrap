@@ -1,15 +1,5 @@
 'use strict';
 
-// import db from './_db';
-// import Mouse from './mouse';
-// import Arm from './arm';
-// import Experiment from './experiment';
-
-
-// export default db;
-
-
-'use strict';
 
 // Require our models. Running each module registers the model into sequelize
 // so any other part of the application could call sequelize.model('Song')

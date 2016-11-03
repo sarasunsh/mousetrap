@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { LOAD_ALL_MICE, ADD_NEW_MOUSE } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
@@ -18,26 +20,19 @@ export const receiveNewMouse = function(newMouse){
 // DISPATCHERS/THUNKS --------------------------------------------------------
 export const fetchMiceFromServer = function(){
     const thunk = function(dispatch) {
-        fetch('/api/mice')
-        .then(res => res.json())
-        .then(fetchedMice => dispatch(loadAllMice(fetchedMice)))
+        axios.get('/api/mice')
+        .then(res => dispatch(loadAllMice(res.data)))
         .catch(err => console.log(err))
     }
     return thunk;
 }
 
 export const addNewMouse = function(data) {
+    console.log('entering dispatcher')
     const thunk = function(dispatch){
-        const body = JSON.stringify(data),
-            method = 'POST',
-            headers = new window.Headers({
-                'Content-Type': 'application/json'
-            });
-
-        return fetch('/api/mice', {method, body, headers})
-        .then(res => res.json())
-        .then(newMouse => {
-            const action = receiveNewMouse(newMouse);
+        axios.post('/api/mice', data)
+        .then(res => {
+            const action = receiveNewMouse(res.data);
             dispatch(action)
         })
     }
@@ -48,7 +43,7 @@ export const addNewMouse = function(data) {
 export default function allMiceReducer(state=[], action){
     switch (action.type){
         case LOAD_ALL_MICE: return  action.loadedMice
-        case ADD_NEW_MOUSE: return [...state.mice, action.newMouse]
+        case ADD_NEW_MOUSE: return [...state, action.newMouse]
         default: return state
     }
 }

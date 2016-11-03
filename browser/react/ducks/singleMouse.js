@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { LOAD_CURRENT_MOUSE } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
@@ -11,9 +13,8 @@ export const loadSingleMouse = function(fetchedMouse){
 // DISPATCHERS/THUNKS --------------------------------------------------------
 export const fetchMouseFromServer = function(mouseID){
     const thunk = function(dispatch) {
-        fetch(`/api/mice/${mouseID}`)
-        .then(res => res.json())
-        .then(fetchedMouse => dispatch(loadSingleMouse(fetchedMouse)))
+        axios.get(`/api/mice/${mouseID}`)
+        .then(res => dispatch(loadSingleMouse(res.data)))
         .catch(err => console.log(err))
     }
     return thunk;
