@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './store';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import Sidebar from './components/Sidebar';
 import App from './components/App';
@@ -37,7 +37,7 @@ const onExperimentEnter = function (nextRouterState) {
 // React-Router--------------------------------------------------------
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>
+    <Router history={browserHistory}>
       <Route path='/' component={App}>
         <Route path="mice" component={AllMiceContainer} onEnter={onMiceEnter}/>
         <Route path="mice/:mouseId" component={SingleMouseContainer} onEnter={onSingleMouseEnter} />

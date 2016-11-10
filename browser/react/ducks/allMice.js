@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 import { LOAD_ALL_MICE, ADD_NEW_MOUSE } from '../constants';
 
@@ -28,12 +29,13 @@ export const fetchMiceFromServer = function(){
 }
 
 export const addNewMouse = function(data) {
-    console.log('entering dispatcher')
     const thunk = function(dispatch){
         axios.post('/api/mice', data)
         .then(res => {
             const action = receiveNewMouse(res.data);
-            dispatch(action)
+            dispatch(action);
+            console.log(res.data.id)
+            browserHistory.push(`/mice/${res.data.id}`);
         })
     }
     return thunk;
