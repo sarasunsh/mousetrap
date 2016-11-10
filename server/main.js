@@ -7,7 +7,7 @@ var chalk = require('chalk');
 // sequelize syncing its models to the postgreSQL database.
 var startDb = require('./db');
 
-// Create a node server instance! cOoL!
+// Create a node server instance
 var server = require('http').createServer();
 
 var createApplication = function () {

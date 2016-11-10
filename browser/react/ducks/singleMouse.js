@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import { LOAD_CURRENT_MOUSE } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
