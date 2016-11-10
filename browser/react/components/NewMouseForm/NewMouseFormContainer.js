@@ -4,17 +4,19 @@ import React from 'react';
 import { connect } from'react-redux';
 import NewMouseForm from './NewMouseForm';
 import { addNewMouse } from '../../ducks/allMice';
+import dateFormat from 'dateformat';
 
 // Here the HOC takes the 'dumb' playlist component and gives it a local state to track the title and then event handlers for when the title is changed and when it is submitted. It also passes down the addNewPlaylist action creator so the new title can be sent to the store after submission
 function NewMouseDecorator(NewMouseFormComponent) {
     return class StatefulNewMouseForm extends React.Component {
         constructor(props){
             super(props);
+
             this.state = {
                 gender: 'male',
                 genotype: '',
-                invalid: true,
-                vegas: false
+                dob: new Date(),
+                invalid: true
             }
             this.handleGenderChange = this.handleGenderChange.bind(this);
             this.handleGenotypeChange = this.handleGenotypeChange.bind(this);
@@ -35,11 +37,12 @@ function NewMouseDecorator(NewMouseFormComponent) {
         }
 
         handleSubmitWithState(evt){
-            // evt.preventDefault();
+            evt.preventDefault();
             const newMouse = {
                 gender:this.state.gender,
                 genotype: this.state.genotype.toUpperCase(),
-                strain: 'C57'
+                strain: 'C57',
+                birthdate: this.state.dob
             }
             this.props.createMouse(newMouse);
             this.setState({
@@ -57,8 +60,8 @@ function NewMouseDecorator(NewMouseFormComponent) {
                     handleSubmit={this.handleSubmitWithState}
                     genderText={this.state.gender}
                     genotypeText={this.state.genotype}
+                    dob={dateFormat(this.state.dob, "yyyy-mm-dd")}
                     invalid={this.state.invalid}
-                    vegas={this.state.vegas}
                 />
             )
         }

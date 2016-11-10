@@ -12,17 +12,19 @@ const Mouse = db.define('mouse', {
     },
     strain: {
         type: Sequelize.STRING
-    // },
-    // birthdate: {
-    //     type: Sequelize.DATE,
-    //     allowNull: false
-    // },
+    },
+    birthdate: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+    },
+    deathdate: {
+        type: Sequelize.DATE
+    }
+    // ,
     // weandate: {
     //     type: Sequelize.DATE
     // },
-    // deathdate: {
-    //     type: Sequelize.DATE
-    // },
+
     // bodyweight: {
     //     type: Sequelize.INTEGER
     // },
@@ -31,7 +33,7 @@ const Mouse = db.define('mouse', {
     // },
     // muscleforce: {
     //     type: Sequelize.INTEGER
-    } //,
+ //,
     // route: {
     //     type: Sequelize.VIRTUAL,
     //     get: function () {

@@ -23,7 +23,6 @@ export default function (props) {
                 onChange={props.handleGenderChange}
                 checked={props.genderText==='female'}
                 value='female'
-
               /> Female
             </div>
           </div>
@@ -35,6 +34,17 @@ export default function (props) {
                 type="text"
                 onChange={props.handleGenotypeChange}
                 value={props.genotypeText}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="col-xs-2 control-label">Date of Birth</label>
+            <div className="col-xs-10">
+              <input
+                className="form-control"
+                type="date"
+                value={props.dob}
+                readOnly
               />
             </div>
           </div>
