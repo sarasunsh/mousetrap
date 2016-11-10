@@ -90,7 +90,7 @@
 	
 	var _singleMouse = __webpack_require__(191);
 	
-	var _experiment = __webpack_require__(192);
+	var _experiment = __webpack_require__(217);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22429,7 +22429,7 @@
 	
 	var _singleMouse2 = _interopRequireDefault(_singleMouse);
 	
-	var _experiment = __webpack_require__(192);
+	var _experiment = __webpack_require__(217);
 	
 	var _experiment2 = _interopRequireDefault(_experiment);
 	
@@ -22549,7 +22549,13 @@
 	exports.fetchMouseFromServer = exports.loadSingleMouse = undefined;
 	exports.default = singleMouseReducer;
 	
+	var _axios = __webpack_require__(192);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
 	var _constants = __webpack_require__(190);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// ACTION-CREATORS--------------------------------------------------------
 	var loadSingleMouse = exports.loadSingleMouse = function loadSingleMouse(fetchedMouse) {
@@ -22562,10 +22568,8 @@
 	// DISPATCHERS/THUNKS --------------------------------------------------------
 	var fetchMouseFromServer = exports.fetchMouseFromServer = function fetchMouseFromServer(mouseID) {
 	    var thunk = function thunk(dispatch) {
-	        fetch('/api/mice/' + mouseID).then(function (res) {
-	            return res.json();
-	        }).then(function (fetchedMouse) {
-	            return dispatch(loadSingleMouse(fetchedMouse));
+	        _axios2.default.get('/api/mice/' + mouseID).then(function (res) {
+	            return dispatch(loadSingleMouse(res.data));
 	        }).catch(function (err) {
 	            return console.log(err);
 	        });
@@ -22590,115 +22594,17 @@
 /* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.removeArm = exports.addNewArm = exports.fetchArmsFromServer = exports.removeDeletedArm = exports.receiveNewArm = exports.loadAllArms = undefined;
-	exports.default = experimentArmReducer;
-	
-	var _axios = __webpack_require__(193);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _constants = __webpack_require__(190);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-	
-	// ACTION-CREATORS--------------------------------------------------------
-	var loadAllArms = exports.loadAllArms = function loadAllArms(fetchedArms) {
-	    return {
-	        type: _constants.LOAD_ALL_ARMS,
-	        loadedArms: fetchedArms
-	    };
-	};
-	
-	var receiveNewArm = exports.receiveNewArm = function receiveNewArm(newArm) {
-	    return {
-	        type: _constants.ADD_NEW_ARM,
-	        newArm: newArm
-	    };
-	};
-	
-	var removeDeletedArm = exports.removeDeletedArm = function removeDeletedArm(deletedArm) {
-	    return {
-	        type: _constants.DELETE_ARM,
-	        deletedArm: deletedArm
-	    };
-	};
-	
-	// DISPATCHERS/THUNKS --------------------------------------------------------
-	var fetchArmsFromServer = exports.fetchArmsFromServer = function fetchArmsFromServer() {
-	    var thunk = function thunk(dispatch) {
-	        _axios2.default.get('/api/experiment').then(function (res) {
-	            return dispatch(loadAllArms(res.data));
-	        }).catch(function (err) {
-	            return console.log(err);
-	        });
-	    };
-	    return thunk;
-	};
-	
-	var addNewArm = exports.addNewArm = function addNewArm(data) {
-	    var thunk = function thunk(dispatch) {
-	        _axios2.default.post('/api/experiment', data).then(function (res) {
-	            var action = receiveNewArm(res.data);
-	            dispatch(action);
-	        });
-	    };
-	    return thunk;
-	};
-	
-	var removeArm = exports.removeArm = function removeArm(id) {
-	    console.log('removeArm', id);
-	    var thunk = function thunk(dispatch) {
-	        _axios2.default.delete('/api/experiment/' + id).then(function (res) {
-	            var action = removeDeletedArm(res.data);
-	            dispatch(action);
-	        }).catch(function (err) {
-	            return console.error('Removing story: ' + id + ' unsuccesful', err);
-	        });
-	    };
-	    return thunk;
-	};
-	
-	// REDUCER --------------------------------------------------------
-	function experimentArmReducer() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var action = arguments[1];
-	
-	    switch (action.type) {
-	        case _constants.LOAD_ALL_ARMS:
-	            return action.loadedArms;
-	        case _constants.ADD_NEW_ARM:
-	            return [].concat(_toConsumableArray(state), [action.newArm]);
-	        case _constants.DELETE_ARM:
-	            return state.filter(function (arm) {
-	                return arm.id !== action.deletedArm;
-	            });
-	        default:
-	            return state;
-	    }
-	}
+	module.exports = __webpack_require__(193);
 
 /***/ },
 /* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(194);
-
-/***/ },
-/* 194 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	
-	var utils = __webpack_require__(195);
-	var bind = __webpack_require__(196);
-	var Axios = __webpack_require__(197);
+	var utils = __webpack_require__(194);
+	var bind = __webpack_require__(195);
+	var Axios = __webpack_require__(196);
 	
 	/**
 	 * Create an instance of Axios
@@ -22731,15 +22637,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(215);
-	axios.CancelToken = __webpack_require__(216);
-	axios.isCancel = __webpack_require__(212);
+	axios.Cancel = __webpack_require__(214);
+	axios.CancelToken = __webpack_require__(215);
+	axios.isCancel = __webpack_require__(211);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(217);
+	axios.spread = __webpack_require__(216);
 	
 	module.exports = axios;
 	
@@ -22748,12 +22654,12 @@
 
 
 /***/ },
-/* 195 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var bind = __webpack_require__(196);
+	var bind = __webpack_require__(195);
 	
 	/*global toString:true*/
 	
@@ -23053,7 +22959,7 @@
 
 
 /***/ },
-/* 196 */
+/* 195 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23070,17 +22976,17 @@
 
 
 /***/ },
-/* 197 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var defaults = __webpack_require__(198);
-	var utils = __webpack_require__(195);
-	var InterceptorManager = __webpack_require__(209);
-	var dispatchRequest = __webpack_require__(210);
-	var isAbsoluteURL = __webpack_require__(213);
-	var combineURLs = __webpack_require__(214);
+	var defaults = __webpack_require__(197);
+	var utils = __webpack_require__(194);
+	var InterceptorManager = __webpack_require__(208);
+	var dispatchRequest = __webpack_require__(209);
+	var isAbsoluteURL = __webpack_require__(212);
+	var combineURLs = __webpack_require__(213);
 	
 	/**
 	 * Create a new instance of Axios
@@ -23161,13 +23067,13 @@
 
 
 /***/ },
-/* 198 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(195);
-	var normalizeHeaderName = __webpack_require__(199);
+	var utils = __webpack_require__(194);
+	var normalizeHeaderName = __webpack_require__(198);
 	
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -23184,10 +23090,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(200);
+	    adapter = __webpack_require__(199);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(200);
+	    adapter = __webpack_require__(199);
 	  }
 	  return adapter;
 	}
@@ -23254,12 +23160,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 199 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -23272,18 +23178,18 @@
 
 
 /***/ },
-/* 200 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(195);
-	var settle = __webpack_require__(201);
-	var buildURL = __webpack_require__(204);
-	var parseHeaders = __webpack_require__(205);
-	var isURLSameOrigin = __webpack_require__(206);
-	var createError = __webpack_require__(202);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(207);
+	var utils = __webpack_require__(194);
+	var settle = __webpack_require__(200);
+	var buildURL = __webpack_require__(203);
+	var parseHeaders = __webpack_require__(204);
+	var isURLSameOrigin = __webpack_require__(205);
+	var createError = __webpack_require__(201);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(206);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -23379,7 +23285,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(208);
+	      var cookies = __webpack_require__(207);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -23456,12 +23362,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 201 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createError = __webpack_require__(202);
+	var createError = __webpack_require__(201);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -23487,12 +23393,12 @@
 
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(203);
+	var enhanceError = __webpack_require__(202);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -23510,7 +23416,7 @@
 
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23535,12 +23441,12 @@
 
 
 /***/ },
-/* 204 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -23609,12 +23515,12 @@
 
 
 /***/ },
-/* 205 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	/**
 	 * Parse headers into an object
@@ -23652,12 +23558,12 @@
 
 
 /***/ },
-/* 206 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -23726,7 +23632,7 @@
 
 
 /***/ },
-/* 207 */
+/* 206 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23768,12 +23674,12 @@
 
 
 /***/ },
-/* 208 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -23827,12 +23733,12 @@
 
 
 /***/ },
-/* 209 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -23885,15 +23791,15 @@
 
 
 /***/ },
-/* 210 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
-	var transformData = __webpack_require__(211);
-	var isCancel = __webpack_require__(212);
-	var defaults = __webpack_require__(198);
+	var utils = __webpack_require__(194);
+	var transformData = __webpack_require__(210);
+	var isCancel = __webpack_require__(211);
+	var defaults = __webpack_require__(197);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -23970,12 +23876,12 @@
 
 
 /***/ },
-/* 211 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(195);
+	var utils = __webpack_require__(194);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -23996,7 +23902,7 @@
 
 
 /***/ },
-/* 212 */
+/* 211 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24007,7 +23913,7 @@
 
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24027,7 +23933,7 @@
 
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24045,7 +23951,7 @@
 
 
 /***/ },
-/* 215 */
+/* 214 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24070,12 +23976,12 @@
 
 
 /***/ },
-/* 216 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(215);
+	var Cancel = __webpack_require__(214);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -24133,7 +24039,7 @@
 
 
 /***/ },
-/* 217 */
+/* 216 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24164,6 +24070,104 @@
 	  };
 	};
 
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.removeArm = exports.addNewArm = exports.fetchArmsFromServer = exports.removeDeletedArm = exports.receiveNewArm = exports.loadAllArms = undefined;
+	exports.default = experimentArmReducer;
+	
+	var _axios = __webpack_require__(192);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _constants = __webpack_require__(190);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	// ACTION-CREATORS--------------------------------------------------------
+	var loadAllArms = exports.loadAllArms = function loadAllArms(fetchedArms) {
+	    return {
+	        type: _constants.LOAD_ALL_ARMS,
+	        loadedArms: fetchedArms
+	    };
+	};
+	
+	var receiveNewArm = exports.receiveNewArm = function receiveNewArm(newArm) {
+	    return {
+	        type: _constants.ADD_NEW_ARM,
+	        newArm: newArm
+	    };
+	};
+	
+	var removeDeletedArm = exports.removeDeletedArm = function removeDeletedArm(deletedArm) {
+	    return {
+	        type: _constants.DELETE_ARM,
+	        deletedArm: deletedArm
+	    };
+	};
+	
+	// DISPATCHERS/THUNKS --------------------------------------------------------
+	var fetchArmsFromServer = exports.fetchArmsFromServer = function fetchArmsFromServer() {
+	    var thunk = function thunk(dispatch) {
+	        _axios2.default.get('/api/experiment').then(function (res) {
+	            return dispatch(loadAllArms(res.data));
+	        }).catch(function (err) {
+	            return console.log(err);
+	        });
+	    };
+	    return thunk;
+	};
+	
+	var addNewArm = exports.addNewArm = function addNewArm(data) {
+	    var thunk = function thunk(dispatch) {
+	        _axios2.default.post('/api/experiment', data).then(function (res) {
+	            var action = receiveNewArm(res.data);
+	            dispatch(action);
+	        });
+	    };
+	    return thunk;
+	};
+	
+	var removeArm = exports.removeArm = function removeArm(id) {
+	    console.log('removeArm', id);
+	    var thunk = function thunk(dispatch) {
+	        _axios2.default.delete('/api/experiment/' + id).then(function (res) {
+	            var action = removeDeletedArm(res.data);
+	            dispatch(action);
+	        }).catch(function (err) {
+	            return console.error('Removing story: ' + id + ' unsuccesful', err);
+	        });
+	    };
+	    return thunk;
+	};
+	
+	// REDUCER --------------------------------------------------------
+	function experimentArmReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case _constants.LOAD_ALL_ARMS:
+	            return action.loadedArms;
+	        case _constants.ADD_NEW_ARM:
+	            return [].concat(_toConsumableArray(state), [action.newArm]);
+	        case _constants.DELETE_ARM:
+	            return state.filter(function (arm) {
+	                return arm.id !== action.deletedArm;
+	            });
+	        default:
+	            return state;
+	    }
+	}
 
 /***/ },
 /* 218 */
@@ -31560,9 +31564,9 @@
 	                                _reactRouter.Link,
 	                                { to: '/mice/' + mouse.id },
 	                                mouse.gender,
-	                                ', ',
+	                                ',',
 	                                mouse.genotype,
-	                                ', ',
+	                                ',',
 	                                mouse.strain
 	                            )
 	                        );
@@ -31923,7 +31927,7 @@
 	
 	var _FormDecorator2 = _interopRequireDefault(_FormDecorator);
 	
-	var _experiment = __webpack_require__(192);
+	var _experiment = __webpack_require__(217);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
