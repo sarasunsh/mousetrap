@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function (props) {
-  console.log('props', props)
   return (
     <div className="well">
       <form className="form-horizontal" onSubmit={props.handleSubmit}>
