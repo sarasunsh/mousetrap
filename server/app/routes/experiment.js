@@ -3,15 +3,18 @@
 const express = require('express');
 const mime = require('mime');
 const router = express.Router();
+const Promise = require('sequelize').Promise;
+
 const models = require('../../db/models');
 const Arm = models.Arm;
 const Experiment = models.Experiment;
+
 module.exports = router;
 
 router.get('/', function (req, res, next) {
-  Arm.findAll()
-  .then(arms => res.json(arms))
-  .catch(next);
+    Arm.findAll()
+    .then(arms => res.json(arms))
+    .catch(next);
 });
 
 router.post('/', function (req, res, next) {

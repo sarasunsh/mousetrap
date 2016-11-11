@@ -25,7 +25,6 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
             this.handleGenotypeChange = this.handleGenotypeChange.bind(this);
             this.handleTreatmentChange = this.handleTreatmentChange.bind(this);
             this.handleSubmitWithState = this.handleSubmitWithState.bind(this);
-            this.handleDeleteClick = this.handleDeleteClick.bind(this);
         }
 
         handleDescriptionChange(evt){
@@ -64,16 +63,6 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
             })
         }
 
-        handleDeleteClick(id){
-            this.props.deleteArm(id);
-            this.setState({
-                description: '',
-                genotype: '',
-                treatment: '',
-                invalid: true
-            })
-        }
-
         render(){
             // Be careful with deleting or editing important props, you should probably namespace your Higher Order props not to break the WrappedComponent.
             const newProps = {
@@ -81,7 +70,6 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
                 handleGenotypeChange: this.handleGenotypeChange,
                 handleTreatmentChange: this.handleTreatmentChange,
                 handleSubmit: this.handleSubmitWithState,
-                handleDelete: this.handleDeleteClick,
                 description: this.state.description,
                 genotype: this.state.genotype,
                 treatment: this.state.treatment,

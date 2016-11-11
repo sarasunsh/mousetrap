@@ -11,7 +11,8 @@ import App from './components/App';
 import AllMiceContainer from './components/AllMice/AllMiceContainer';
 import SingleMouseContainer from './components/SingleMouse/SingleMouseContainer';
 import NewMouseFormContainer from './components/NewMouseForm/NewMouseFormContainer';
-import ExperimentFormContainer from './components/Experiment/ExperimentFormContainer';
+import ExperimentPageContainer from './components/Experiment/ExperimentPage';
+import Chatroom from './components/Chatroom/Chatroom';
 
 import { fetchMiceFromServer } from './ducks/allMice';
 import { fetchMouseFromServer } from './ducks/singleMouse';
@@ -42,7 +43,8 @@ ReactDOM.render(
         <Route path="mice" component={AllMiceContainer} onEnter={onMiceEnter}/>
         <Route path="mice/:mouseId" component={SingleMouseContainer} onEnter={onSingleMouseEnter} />
         <Route path="addmouse" component={NewMouseFormContainer} />
-        <Route path="experiment" component={ExperimentFormContainer} onEnter={onExperimentEnter}/>
+        <Route path="experiment" component={ExperimentPageContainer} onEnter={onExperimentEnter}/>
+        <Route path="chat" component={Chatroom}/>
         <IndexRoute component={AllMiceContainer} onEnter={onMiceEnter}/>
       </Route>
     </Router>

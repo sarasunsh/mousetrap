@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 
 import Sidebar from '../components/Sidebar';
+import NavBar from './NavBar';
 
 export default class App extends Component {
 
@@ -13,8 +14,7 @@ export default class App extends Component {
           <Sidebar />
         </div>
         <div className="col-xs-10">
-        { this.props.children }
-
+          { this.props.children }
         </div>
       </div>
     );

@@ -1,61 +1,60 @@
 import React from 'react';
 import { Link } from 'react-router';
-
+import { Accordion, Panel, Col, Button } from 'react-bootstrap';
 
 export default class ExperimentForm extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            open: false
+        };
+    }
+
     render () {
         return (
-            <div className='well'>
-                <div>
-                    <h4>Experimental Design</h4>
-                    {this.props.exptArms.map( arm => (
-                        <div key={arm.id}>
-                            <h5>{arm.genotype}+{arm.treatment}</h5>
-                            <button
-                                className="btn btn-default"
-                                onClick={() => this.props.handleDelete(arm.id)}>
-                                <span className="glyphicon glyphicon-remove"></span>
-                            </button>
-                        </div>
-                        )
-                    )}
-                </div><br></br>
+
+          <div>
+            <Button bsStyle="primary" onClick={ ()=> this.setState({ open: !this.state.open })}>
+              Add another arm
+            </Button>
+            <Panel collapsible expanded={this.state.open}>
                 <form className='form-horizontal' onSubmit={this.props.handleSubmit}>
-                    <legend>Add Another Arm</legend>
-                    <label>Description</label>
-                    <input
-                        className="form-control"
-                        type='text'
-                        value={this.props.description}
-                        onChange={this.props.handleDescriptionChange}
-                    /><br></br>
-                    <label>Enrollment Goal</label>
-                    <input
-                        className="form-control"
-                        type='text'
-                    /><br></br>
                     <label>Genotype</label>
                     <input
                         className="form-control"
                         type='text'
                         value={this.props.genotype}
                         onChange={this.props.handleGenotypeChange}
-                    /><br></br>
+                    />
                     <label>Treatment</label>
                     <input
                         className="form-control"
                         type='text'
                         value={this.props.treatment}
                         onChange={this.props.handleTreatmentChange}
+                    />
+                    <label>Description</label>
+                    <input
+                        className="form-control"
+                        type='text'
+                        value={this.props.description}
+                        onChange={this.props.handleDescriptionChange}
+                    />
+                    <label>Enrollment Goal</label>
+                    <input
+                        className="form-control"
+                        type='text'
                     /><br></br>
-                    <button
+                    <Button
                         type="submit"
                         className="btn btn-success"
                         disabled={this.props.invalid}
                     > Create Experimental Arm
-                    </button>
+                    </Button>
                 </form>
-            </div>
+            </Panel>
+          </div>
+
         )
     }
 }

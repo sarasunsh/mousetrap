@@ -25,9 +25,9 @@ const publicPath = path.join(__dirname, '../../public');
 const browserPath = path.join(__dirname, '../../browser');
 
 app.use(favicon(faviconPath));
-app.use(express.static(npmPath));
+// app.use(express.static(npmPath));
 app.use(express.static(publicPath));
-app.use(express.static(browserPath));
+// app.use(express.static(browserPath));
 
 // Routes that will be accessed via AJAX should be prepended with
 // /api so they are isolated from our GET /* wildcard.
