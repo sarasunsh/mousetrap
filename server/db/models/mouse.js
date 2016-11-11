@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 
+
 const Mouse = db.define('mouse', {
     gender: {
         type: Sequelize.ENUM('male', 'female'),
@@ -40,18 +41,17 @@ const Mouse = db.define('mouse', {
     //         return '/wiki/'+this.urlTitle;
     //     }
     // }
-// }, {
-    // classMethods: {
-    //     findByTag: function(searchTag){
-    //     return Page.findAll({
-    //             where : {
-    //                 tags: {
-    //                     $overlap: [searchTag]
-    //                 }
-    //             }
-    //         })
-    //     }
-    // },
+}, {
+    classMethods: {
+        getAllWhereArm: function(armID){
+        return Mouse.findAll({
+                where : {
+                    armId: armID
+                }
+            })
+        }
+    }
+    // ,
     // instanceMethods: {
     //     findSimilar: function() {
     //         return Page.findAll({

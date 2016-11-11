@@ -10,7 +10,7 @@ export default class ExperimentForm extends React.Component {
                     <h4>Experimental Design</h4>
                     {this.props.exptArms.map( arm => (
                         <div key={arm.id}>
-                            <h5>{arm.id}: {arm.genotype}+{arm.treatment}</h5>
+                            <h5>{arm.genotype}+{arm.treatment}</h5>
                             <button
                                 className="btn btn-default"
                                 onClick={() => this.props.handleDelete(arm.id)}>

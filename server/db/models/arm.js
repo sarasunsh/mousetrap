@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+const Mouse = db.Mouse;
 
 const Arm = db.define('arm', {
     title: {
@@ -16,6 +17,21 @@ const Arm = db.define('arm', {
     treatment: {
         type: Sequelize.STRING,
         allowNull: false
+    }
+}, {
+    classMethods: {
+        getByGenotype: function(genotype){
+        return Arm.findAll({
+                where : {
+                    genotype: genotype
+                }
+            })
+        }
+    },
+    instanceMethods: {
+        countMice: function(){
+            return _factory.associations['Mouse'].target.count({ where: { armId: this.id } })
+        }
     }
 });
 
