@@ -10,9 +10,10 @@ const Arm = require('./arm');
 const Experiment = require('./experiment');
 
 // Form the associations
-Mouse.belongsTo(Experiment);
+Mouse.belongsTo(Arm);
 Arm.belongsTo(Experiment)
 Experiment.hasMany(Arm);
+Arm.hasMany(Mouse);
 
 // exported just in case, but can also be fetched via db.model('Mouse') etc.
 module.exports = {

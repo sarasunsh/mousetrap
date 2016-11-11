@@ -4,6 +4,9 @@ const express = require('express');
 const mime = require('mime');
 const models = require('../../db/models');
 const Mouse = models.Mouse;
+const Arm = models.Arm;
+const Promise = require('sequelize').Promise; // sequelize comes with Bluebird
+
 
 const router = express.Router();
 module.exports = router;
@@ -23,8 +26,17 @@ router.get('/:mouseID', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  Mouse.create(req.body)
-  .then(newMouse => res.status(201).json(newMouse))
-  .catch(next);
+    // Arm.findById(1)
+    // .then(arm => arm.countMice())
+    // .then(res =>console.log(res))
+    const armPromise = Arm.getByGenotype(req.body.genotype);
+    const mousePromise = Mouse.create(req.body);
+
+    Promise.all([mousePromise, armPromise])
+    .spread((newMouse, possibleArms) => {
+        newMouse.setArm(possibleArms[0].id);
+        res.status(201).json(newMouse);
+    })
+    .catch(next);
 });
 

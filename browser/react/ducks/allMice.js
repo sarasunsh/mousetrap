@@ -34,7 +34,6 @@ export const addNewMouse = function(data) {
         .then(res => {
             const action = receiveNewMouse(res.data);
             dispatch(action);
-            console.log(res.data.id)
             browserHistory.push(`/mice/${res.data.id}`);
         })
     }
