@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 
-import { LOAD_ALL_MICE, ADD_NEW_MOUSE } from '../constants';
+import { LOAD_ALL_MICE, ADD_NEW_MOUSE, REMOVE_DEAD_MOUSE } from '../constants';
 
 // ACTION-CREATORS--------------------------------------------------------
 export const loadAllMice = function(fetchedMice){
@@ -15,6 +15,13 @@ export const receiveNewMouse = function(newMouse){
     return {
         type: ADD_NEW_MOUSE,
         newMouse: newMouse
+    }
+}
+
+export const removeDeadMouse = function(deceasedMouse){
+    return {
+        type: REMOVE_DEAD_MOUSE,
+        deceasedMouse
     }
 }
 
@@ -40,11 +47,27 @@ export const addNewMouse = function(data) {
     return thunk;
 }
 
+export const reportMouseDeath = function(mouseID){
+    const thunk = function(dispatch){
+        axios.put(`/api/mice/${mouseID}`)
+        .then(res => {
+            dispatch(removeDeadMouse(res.data));
+            browserHistory.push(`/mice/`);
+        })
+        .catch(err => console.log(err))
+    }
+    return thunk;
+}
+
 // REDUCER --------------------------------------------------------
 export default function allMiceReducer(state=[], action){
     switch (action.type){
         case LOAD_ALL_MICE: return  action.loadedMice
         case ADD_NEW_MOUSE: return [...state, action.newMouse]
+        case REMOVE_DEAD_MOUSE:
+            let indx = state.map(x => x.id).indexOf(action.deceasedMouse.id)
+
+            return [...state.slice(0, indx), ...state.slice(indx + 1)]
         default: return state
     }
 }

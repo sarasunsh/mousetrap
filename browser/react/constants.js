@@ -6,3 +6,4 @@ export const LOAD_CURRENT_MOUSE = 'LOAD_CURRENT_MOUSE';
 export const ADD_NEW_ARM = 'ADD_NEW_ARM';
 export const DELETE_ARM = 'DELETE_ARM';
 export const LOAD_ALL_ARMS = 'LOAD_ALL_ARMS';
+export const REMOVE_DEAD_MOUSE = 'REMOVE_DEAD_MOUSE';

@@ -9,6 +9,7 @@ export const loadSingleMouse = function(fetchedMouse){
     }
 }
 
+
 // DISPATCHERS/THUNKS --------------------------------------------------------
 export const fetchMouseFromServer = function(mouseID){
     const thunk = function(dispatch) {

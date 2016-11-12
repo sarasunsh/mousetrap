@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SingleMouse from './SingleMouse';
-import { fetchMouseFromServer } from '../../ducks/singleMouse';
+import { reportMouseDeath } from '../../ducks/allMice';
 
 
 const mapStateToProps = function (state) {
@@ -11,9 +11,8 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
-    onLoadSingleMouse: function () {
-      const mouseId = ownProps.params.mouseId;
-      const thunk = fetchMouseFromServer(mouseId);
+    reportDeath: function (mouseID) {
+      const thunk = reportMouseDeath(mouseID);
       dispatch(thunk);
     }
   };
