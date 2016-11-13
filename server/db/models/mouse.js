@@ -44,11 +44,18 @@ const Mouse = db.define('mouse', {
 }, {
     classMethods: {
         getAllWhereArm: function(armID){
-        return Mouse.findAll({
+            return Mouse.findAll({
                 where : {
                     armId: armID
                 }
-            })
+            });
+        },
+        getAllAlive: function(){
+            return Mouse.findAll({
+                where: {
+                    deathdate: null
+                }
+            });
         }
     }
     // ,

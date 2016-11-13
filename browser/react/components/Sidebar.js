@@ -20,11 +20,6 @@ export default function (props) {
       </section>
       <section>
         <h4 className='menu-item'>
-          <Link to="/mice">Breeding Pairs</Link>
-        </h4>
-      </section>
-      <section>
-        <h4 className='menu-item'>
           <Link to="/experiment">Experimental Design</Link>
         </h4>
       </section>
@@ -35,7 +30,7 @@ export default function (props) {
       </section>
       <section>
         <h4 className='menu-item'>
-          <Link to="/mice">Analytics</Link>
+          <Link to="/analytics">Analytics</Link>
         </h4>
       </section>
       <section>

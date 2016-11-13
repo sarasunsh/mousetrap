@@ -13,10 +13,13 @@ import SingleMouseContainer from './components/SingleMouse/SingleMouseContainer'
 import NewMouseFormContainer from './components/NewMouseForm/NewMouseFormContainer';
 import ExperimentPageContainer from './components/Experiment/ExperimentPage';
 import Chatroom from './components/Chatroom/Chatroom';
+import AnalyticsContainer from './components/Analytics';
 
 import { fetchMiceFromServer } from './ducks/allMice';
 import { fetchMouseFromServer } from './ducks/singleMouse';
 import { fetchArmsFromServer } from './ducks/experiment';
+// import { fetchDogsFromFile } from './ducks/analytics';
+
 
 // onEnter prompts ----------------------------------------------------
 const onMiceEnter = function () {
@@ -30,10 +33,15 @@ const onSingleMouseEnter = function (nextRouterState) {
   store.dispatch(thunk);
 };
 
-const onExperimentEnter = function (nextRouterState) {
+const onExperimentEnter = function () {
   const thunk = fetchArmsFromServer();
   store.dispatch(thunk);
 };
+
+// const onAnalyticsEnter = function () {
+//   const thunk = fetchDogsFromFile();
+//   store.dispatch(thunk);
+// };
 
 // React-Router--------------------------------------------------------
 ReactDOM.render(
@@ -45,6 +53,7 @@ ReactDOM.render(
         <Route path="addmouse" component={NewMouseFormContainer} />
         <Route path="experiment" component={ExperimentPageContainer} onEnter={onExperimentEnter}/>
         <Route path="chat" component={Chatroom}/>
+        <Route path="analytics" component={AnalyticsContainer} />
         <IndexRoute component={AllMiceContainer} onEnter={onMiceEnter}/>
       </Route>
     </Router>

@@ -11,10 +11,16 @@ const router = express.Router();
 module.exports = router;
 
 router.get('/', function (req, res, next) {
-    Mouse.findAll()
+    Mouse.getAllAlive()
     .then(mice => res.json(mice))
     .catch(next);
 });
+
+
+// router.get('/alive', function(req, res, next){
+//     Mouse.getAllAlive()
+//     .then(mice => console.log(mice))
+// })
 
 router.get('/:mouseID', function (req, res, next) {
     Mouse.findById(req.params.mouseID)
@@ -37,6 +43,7 @@ router.post('/', function (req, res, next) {
     })
     .catch(next);
 });
+
 
 // Updating an animal that has died
 router.put('/:mouseID', function (req, res, next) {
