@@ -14,6 +14,8 @@ import NewMouseFormContainer from './components/NewMouseForm/NewMouseFormContain
 import ExperimentPageContainer from './components/Experiment/ExperimentPage';
 import Chatroom from './components/Chatroom/Chatroom';
 import AnalyticsContainer from './components/Analytics';
+import Gantt from './components/Gantt';
+import Landing from './components/Landing';
 
 import { fetchMiceFromServer } from './ducks/allMice';
 import { fetchMouseFromServer } from './ducks/singleMouse';
@@ -37,11 +39,6 @@ const onExperimentEnter = function () {
   store.dispatch(thunk);
 };
 
-// const onAnalyticsEnter = function () {
-//   const thunk = fetchDogsFromFile();
-//   store.dispatch(thunk);
-// };
-
 // React-Router--------------------------------------------------------
 ReactDOM.render(
   <Provider store={store}>
@@ -53,7 +50,8 @@ ReactDOM.render(
         <Route path="experiment" component={ExperimentPageContainer} onEnter={onExperimentEnter}/>
         <Route path="chat" component={Chatroom}/>
         <Route path="analytics" component={AnalyticsContainer} />
-        <IndexRoute component={AllMiceContainer} onEnter={onMiceEnter}/>
+        <Route path="gantt" component={Gantt} />
+        <IndexRoute component={Landing}/>
       </Route>
     </Router>
   </Provider>,

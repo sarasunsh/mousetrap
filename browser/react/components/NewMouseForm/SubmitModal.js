@@ -19,7 +19,6 @@ export default class EuthanizeModal extends React.Component{
         console.log(this.props)
         return (
             <div>
-
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
                         <Modal.Title>Euthanize Alert</Modal.Title>

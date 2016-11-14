@@ -22,11 +22,7 @@ const data2= [
 ];
 
 
-export default class mainComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = { kaplanChart: [] }
-    }
+export default class Analytics extends Component {
 
     render() {
 

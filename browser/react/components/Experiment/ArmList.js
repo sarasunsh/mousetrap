@@ -16,6 +16,7 @@ class ArmList extends Component {
       <Well className="clearfix">
         <div>
           <h3>Experimental Design</h3>
+          <h4> Myostatin Inhibition in Combination with SMN Upregulation </h4>
           <Table striped bordered condensed hover style={cssBrandOrange}>
             <thead>
               <tr>

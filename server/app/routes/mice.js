@@ -19,14 +19,17 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/:mouseID', function (req, res, next) {
-    Mouse.findById(req.params.mouseID)
+    Mouse.findOne({
+        where: {id: req.params.mouseID},
+        include: [ {model: Arm} ]
+    })
     .then(mouse => res.json(mouse))
     .catch(next);
 });
 
 // Adding a new mouse
 router.post('/', function (req, res, next) {
-    // This logic determines which arm the mouse should be added to, based on
+    // This logic determines which arm the mouse should be added to, based on its genotype and relative enrollment
     let stats = [];
     Arm.getByGenotype(req.body.genotype)
     .then(arms => {

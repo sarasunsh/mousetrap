@@ -25,7 +25,7 @@ export default function (props) {
       </section>
       <section>
         <h4 className='menu-item'>
-          <Link to="/mice">Gantt Charts</Link>
+          <Link to="/gantt">Gantt Charts</Link>
         </h4>
       </section>
       <section>
