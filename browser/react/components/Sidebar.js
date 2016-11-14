@@ -7,7 +7,9 @@ import { Button} from 'react-bootstrap';
 export default function (props) {
   return (
     <sidebar>
-      <img src="mouse2.svg" className="logo" />
+      <Link to="/">
+        <img src="mouse2.svg" className="logo" />
+      </Link>
       <section>
         <h4 className='menu-item'>
           <Link to="/addmouse">Add New Mouse</Link>

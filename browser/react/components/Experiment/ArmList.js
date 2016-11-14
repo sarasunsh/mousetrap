@@ -17,6 +17,7 @@ class ArmList extends Component {
         <div>
           <h3>Experimental Design</h3>
           <h4> Myostatin Inhibition in Combination with SMN Upregulation </h4>
+          <Col xs={6} >
           <Table striped bordered condensed hover style={cssBrandOrange}>
             <thead>
               <tr>
@@ -48,6 +49,7 @@ class ArmList extends Component {
               )}
             </tbody>
           </Table>
+          </Col>
         </div>
       </Well>
     )

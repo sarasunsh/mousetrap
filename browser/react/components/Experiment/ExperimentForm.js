@@ -14,6 +14,8 @@ export default class ExperimentForm extends React.Component {
         return (
 
           <div>
+          <Col xs={4} >
+
             <Button bsStyle="primary" onClick={ ()=> this.setState({ open: !this.state.open })}>
               Add another arm
             </Button>
@@ -33,13 +35,6 @@ export default class ExperimentForm extends React.Component {
                         value={this.props.treatment}
                         onChange={this.props.handleTreatmentChange}
                     />
-                    <label>Description</label>
-                    <input
-                        className="form-control"
-                        type='text'
-                        value={this.props.description}
-                        onChange={this.props.handleDescriptionChange}
-                    />
                     <label>Enrollment Goal</label>
                     <input
                         className="form-control"
@@ -53,6 +48,7 @@ export default class ExperimentForm extends React.Component {
                     </Button>
                 </form>
             </Panel>
+            </Col>
           </div>
 
         )

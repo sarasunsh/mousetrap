@@ -3,10 +3,6 @@ const db = require('../db');
 const Mouse = db.Mouse;
 
 const Arm = db.define('arm', {
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     goal: {
         type: Sequelize.INTEGER
     },

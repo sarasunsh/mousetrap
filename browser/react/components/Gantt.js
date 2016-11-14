@@ -14,11 +14,9 @@ const data = [
       {name: 'Arm4 - WT + Drug', enrolled: 2, remaining: 3}
 ];
 
-
 export default class Gantt extends Component {
 
     render() {
-
         return (
           <div>
               <h4>Enrollment Progress</h4>

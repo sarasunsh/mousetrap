@@ -16,21 +16,13 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
         constructor(props){
             super(props);
             this.state = {
-                description: '',
                 genotype: '',
                 treatment: '',
                 invalid: true
             }
-            this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
             this.handleGenotypeChange = this.handleGenotypeChange.bind(this);
             this.handleTreatmentChange = this.handleTreatmentChange.bind(this);
             this.handleSubmitWithState = this.handleSubmitWithState.bind(this);
-        }
-
-        handleDescriptionChange(evt){
-            this.setState({
-                description: evt.target.value
-            });
         }
 
         handleGenotypeChange(evt){
@@ -49,14 +41,12 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
         handleSubmitWithState(evt){
             evt.preventDefault();
             const newArm = {
-                title:this.state.description,
                 goal: 5,
                 genotype: this.state.genotype.toUpperCase(),
                 treatment: this.state.treatment
             }
             this.props.createArm(newArm);
             this.setState({
-                description: '',
                 genotype: '',
                 treatment: '',
                 invalid: true
@@ -66,11 +56,9 @@ function ExperimentFormDecorator(ExperimentFormComponent) {
         render(){
             // Be careful with deleting or editing important props, you should probably namespace your Higher Order props not to break the WrappedComponent.
             const newProps = {
-                handleDescriptionChange: this.handleDescriptionChange,
                 handleGenotypeChange: this.handleGenotypeChange,
                 handleTreatmentChange: this.handleTreatmentChange,
                 handleSubmit: this.handleSubmitWithState,
-                description: this.state.description,
                 genotype: this.state.genotype,
                 treatment: this.state.treatment,
                 goal: this.state.goal,
