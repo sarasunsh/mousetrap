@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import {Grid, Row} from 'react-bootstrap';
 
-// import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 

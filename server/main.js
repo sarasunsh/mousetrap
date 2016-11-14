@@ -13,19 +13,36 @@ const server = require('http').createServer();
 // Set up Socket.io communication
 const connectSocket = function() {
     const io = require('socket.io').listen(server); // pass the server to socket.io
-    io.on('connection', function (socket) {
-        console.log('A new client has connected!', socket.id);
 
-        socket.on('clicked', function () {
-            console.log('Good job!');
+    let userArr = [];
+    let nextUserId = 1;
+    io.on('connection', function (socket) {
+        const newUser = "User "+nextUserId
+        userArr.push(newUser)
+        nextUserId +=1;
+
+        // send the new user their name and a list of users
+        socket.emit('init', {
+            name: newUser,
+            users: userArr
         });
 
+        // notify other clients that a new user has joined
+        socket.broadcast.emit('user:join', {
+            name: newUser
+        });
+
+        // broadcast a user's message to other users
         socket.on('send:message', function(msg){
             socket.broadcast.emit('newMsg', msg)
-        })
+        });
 
+        // let other users know once a user has left
         socket.on('disconnect', function () {
-            console.log('Sad to see you go');
+            userArr = userArr.filter(name => name !== newUser);
+            socket.broadcast.emit('user:left', {
+                name: newUser
+            });
         });
     });
 }

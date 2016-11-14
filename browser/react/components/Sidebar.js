@@ -2,9 +2,15 @@
 
 import React from 'react';
 import { Link } from 'react-router';
-import { Button} from 'react-bootstrap';
+import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 
 export default function (props) {
+  const popoverHoverFocus = (
+    <Popover id="popover-trigger-hover-focus" title="Chatroom">
+        Discuss study plans with other laboratories.
+    </Popover>
+  )
+
   return (
     <sidebar>
       <Link to="/">
@@ -36,9 +42,11 @@ export default function (props) {
         </h4>
       </section>
       <section>
-        <Button bsStyle="chat" block>
-          <Link to="/chat">Chatroom</Link>
-        </Button>
+        <OverlayTrigger trigger={['hover', 'focus']} placement="bottom" overlay={popoverHoverFocus}>
+          <Button bsStyle="chat" block>
+            <Link to="/chat">Collaboration</Link>
+          </Button>
+        </OverlayTrigger>
       </section>
     </sidebar>
 

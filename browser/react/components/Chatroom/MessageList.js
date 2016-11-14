@@ -4,8 +4,10 @@ import React from 'react';
 class Message extends React.Component{
     render(){
         return(
-            <li className="message">{this.props.msg}
-            </li>
+            <div className="message">
+                <strong>{this.props.user} : </strong>
+                <span>{this.props.msg}</span>
+            </div>
         )
     }
 };
@@ -15,8 +17,12 @@ class Message extends React.Component{
 export default class MessageList extends React.Component {
     render(){
         console.log(this.props)
-        const renderMessage = function(message){
-            return <Message msg={message.text} />
+        const renderMessage = function(message, idx){
+            return <Message
+                key={idx}
+                msg={message.text}
+                user={message.user}
+            />
         }
 
         return(

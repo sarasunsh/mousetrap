@@ -20,7 +20,8 @@ export default class MessageForm extends React.Component {
     handleSubmit(e){
         e.preventDefault();
         var message = {
-            text : this.state.text
+            text : this.state.text,
+            user: this.props.user
         }
         this.props.submitFunc(message);
         this.setState(
@@ -29,6 +30,8 @@ export default class MessageForm extends React.Component {
     }
 
     render(){
+        console.log('messageForm', this.props)
+
         return(
           <div className="messageForm">
               <form onSubmit={this.handleSubmit} >
