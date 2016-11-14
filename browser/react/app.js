@@ -18,7 +18,6 @@ import AnalyticsContainer from './components/Analytics';
 import { fetchMiceFromServer } from './ducks/allMice';
 import { fetchMouseFromServer } from './ducks/singleMouse';
 import { fetchArmsFromServer } from './ducks/experiment';
-// import { fetchDogsFromFile } from './ducks/analytics';
 
 
 // onEnter prompts ----------------------------------------------------

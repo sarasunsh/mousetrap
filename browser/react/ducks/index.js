@@ -5,13 +5,13 @@ import { combineReducers } from 'redux';
 import mice from './allMice';
 import currentMouse from './singleMouse';
 import exptArms from './experiment';
-// import dogs from './analytics';
+import euthanize from './euthanize';
 
 const rootReducer = combineReducers({
   mice,
   currentMouse,
-  exptArms
-  // dogs
+  exptArms,
+  euthanize
 });
 
 export default rootReducer;

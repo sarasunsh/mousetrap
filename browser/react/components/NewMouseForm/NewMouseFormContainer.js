@@ -1,12 +1,10 @@
-'use strict';
-
 import React from 'react';
 import { connect } from'react-redux';
 import NewMouseForm from './NewMouseForm';
 import { addNewMouse } from '../../ducks/allMice';
 import dateFormat from 'dateformat';
 
-// Here the HOC takes the 'dumb' playlist component and gives it a local state to track the title and then event handlers for when the title is changed and when it is submitted. It also passes down the addNewPlaylist action creator so the new title can be sent to the store after submission
+// Here the HOC takes the 'dumb' form component and gives it a local state to track the title and then event handlers for when the title is changed and when it is submitted. It also passes down the addNewMouse action creator so the new title can be sent to the store after submission
 function NewMouseDecorator(NewMouseFormComponent) {
     return class StatefulNewMouseForm extends React.Component {
         constructor(props){
@@ -62,6 +60,7 @@ function NewMouseDecorator(NewMouseFormComponent) {
                     genotypeText={this.state.genotype}
                     dob={dateFormat(this.state.dob, "yyyy-mm-dd")}
                     invalid={this.state.invalid}
+                    euth={this.props.euthanize}
                 />
             )
         }
@@ -70,7 +69,7 @@ function NewMouseDecorator(NewMouseFormComponent) {
 
 const mapStateToProps = function(state){
     return {
-        test: state.mice
+        euthanize: state.euthanize
     }
 }
 

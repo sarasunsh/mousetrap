@@ -8,6 +8,7 @@ const Arm = models.Arm;
 const Promise = require('sequelize').Promise; // sequelize comes with Bluebird
 
 const router = express.Router();
+
 module.exports = router;
 
 router.get('/', function (req, res, next) {
@@ -17,11 +18,6 @@ router.get('/', function (req, res, next) {
 });
 
 
-// router.get('/alive', function(req, res, next){
-//     Mouse.getAllAlive()
-//     .then(mice => console.log(mice))
-// })
-
 router.get('/:mouseID', function (req, res, next) {
     Mouse.findById(req.params.mouseID)
     .then(mouse => res.json(mouse))
@@ -30,16 +26,31 @@ router.get('/:mouseID', function (req, res, next) {
 
 // Adding a new mouse
 router.post('/', function (req, res, next) {
-    // Arm.findById(1)
-    // .then(arm => arm.countMice())
-    // .then(res =>console.log(res))
-    const armPromise = Arm.getByGenotype(req.body.genotype);
-    const mousePromise = Mouse.create(req.body);
-
-    Promise.all([mousePromise, armPromise])
-    .spread((newMouse, possibleArms) => {
-        newMouse.setArm(possibleArms[0].id);
-        res.status(201).json(newMouse);
+    // This logic determines which arm the mouse should be added to, based on
+    let stats = [];
+    Arm.getByGenotype(req.body.genotype)
+    .then(arms => {
+        stats = arms.map(arm => [arm.id, arm.goal])
+        return Promise.map(arms, function(arm){
+            return arm.countMice()
+        })
+    })
+    .then(count => {
+        for (var i = 0; i < stats.length; i++) {
+            if (count[i] < stats[i][1]){
+                return stats[i][0]
+            }
+        }
+        return false;
+    })
+    .then(result => {
+        if (result){
+            return Mouse.create(req.body)
+            .then(newMouse => newMouse.setArm(result))
+            .then(mouse => res.send(mouse))
+        } else {
+            res.send('EUTHANIZE')
+        }
     })
     .catch(next);
 });
@@ -50,15 +61,6 @@ router.put('/:mouseID', function (req, res, next) {
     Mouse.findById(req.params.mouseID)
     .then(foundMouse => foundMouse.update({deathdate: new Date() }))
     .then(updatedMouse => res.send(updatedMouse))
-
-    // Mouse.update(
-    //     {
-    //         deathdate: req.body.deathdate
-    //     }, {
-    //         where: { id: req.params.mouseID }
-    //     }
-    // )
-    // .then(updatedMouse => console.log(updatedMouse))
     .catch(next);
 });
 

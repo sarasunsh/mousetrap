@@ -1,4 +1,5 @@
 import React from 'react';
+import SubmitModalContainer from './SubmitModalContainer';
 
 export default function (props) {
   return (
@@ -7,7 +8,7 @@ export default function (props) {
         <fieldset>
           <legend>New Mouse</legend>
           <div className="form-group">
-            <label className="col-xs-2 control-label">Gender</label>
+            <label className="col-xs-2 control-label" >Gender</label>
             <div className="col-xs-10">
               <input
                 className="form-control"
@@ -55,6 +56,7 @@ export default function (props) {
                 disabled={props.invalid}>
                 Create Mouse
             </button>
+            {props.euth ? <SubmitModalContainer genotype={props.genotypeText}/> : ''}
             </div>
           </div>
         </fieldset>

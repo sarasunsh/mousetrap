@@ -102,9 +102,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import { fetchDogsFromFile } from './ducks/analytics';
-	
-	
 	// onEnter prompts ----------------------------------------------------
 	var onMiceEnter = function onMiceEnter() {
 	  var thunk = (0, _allMice.fetchMiceFromServer)();
@@ -20778,15 +20775,17 @@
 	
 	var _experiment2 = _interopRequireDefault(_experiment);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _euthanize = __webpack_require__(1027);
 	
-	// import dogs from './analytics';
+	var _euthanize2 = _interopRequireDefault(_euthanize);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var rootReducer = (0, _redux.combineReducers)({
 	  mice: _allMice2.default,
 	  currentMouse: _singleMouse2.default,
-	  exptArms: _experiment2.default
-	  // dogs
+	  exptArms: _experiment2.default,
+	  euthanize: _euthanize2.default
 	});
 	
 	exports.default = rootReducer;
@@ -20808,6 +20807,8 @@
 	var _axios2 = _interopRequireDefault(_axios);
 	
 	var _reactRouter = __webpack_require__(202);
+	
+	var _euthanize = __webpack_require__(1027);
 	
 	var _constants = __webpack_require__(265);
 	
@@ -20852,9 +20853,14 @@
 	var addNewMouse = exports.addNewMouse = function addNewMouse(data) {
 	    var thunk = function thunk(dispatch) {
 	        _axios2.default.post('/api/mice', data).then(function (res) {
-	            var action = receiveNewMouse(res.data);
-	            dispatch(action);
-	            _reactRouter.browserHistory.push('/mice/' + res.data.id);
+	            if (res.data === 'EUTHANIZE') {
+	                var action = (0, _euthanize.toggleEuthanize)();
+	                dispatch(action);
+	            } else {
+	                var _action = receiveNewMouse(res.data);
+	                dispatch(_action);
+	                _reactRouter.browserHistory.push('/mice/' + res.data.id);
+	            }
 	        });
 	    };
 	    return thunk;
@@ -20886,7 +20892,6 @@
 	            var indx = state.map(function (x) {
 	                return x.id;
 	            }).indexOf(action.deceasedMouse.id);
-	
 	            return [].concat(_toConsumableArray(state.slice(0, indx)), _toConsumableArray(state.slice(indx + 1)));
 	        default:
 	            return state;
@@ -28042,6 +28047,7 @@
 	var DELETE_ARM = exports.DELETE_ARM = 'DELETE_ARM';
 	var LOAD_ALL_ARMS = exports.LOAD_ALL_ARMS = 'LOAD_ALL_ARMS';
 	var REMOVE_DEAD_MOUSE = exports.REMOVE_DEAD_MOUSE = 'REMOVE_DEAD_MOUSE';
+	var TOGGLE_EUTHANIZE = exports.TOGGLE_EUTHANIZE = 'TOGGLE_EUTHANIZE';
 
 /***/ },
 /* 266 */
@@ -48882,7 +48888,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	// Here the HOC takes the 'dumb' playlist component and gives it a local state to track the title and then event handlers for when the title is changed and when it is submitted. It also passes down the addNewPlaylist action creator so the new title can be sent to the store after submission
+	// Here the HOC takes the 'dumb' form component and gives it a local state to track the title and then event handlers for when the title is changed and when it is submitted. It also passes down the addNewMouse action creator so the new title can be sent to the store after submission
 	function NewMouseDecorator(NewMouseFormComponent) {
 	    return function (_React$Component) {
 	        _inherits(StatefulNewMouseForm, _React$Component);
@@ -48946,7 +48952,8 @@
 	                    genderText: this.state.gender,
 	                    genotypeText: this.state.genotype,
 	                    dob: (0, _dateformat2.default)(this.state.dob, "yyyy-mm-dd"),
-	                    invalid: this.state.invalid
+	                    invalid: this.state.invalid,
+	                    euth: this.props.euthanize
 	                });
 	            }
 	        }]);
@@ -48957,7 +48964,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        test: state.mice
+	        euthanize: state.euthanize
 	    };
 	};
 	
@@ -48978,7 +48985,7 @@
 /* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -48986,100 +48993,101 @@
 	
 	exports.default = function (props) {
 	  return _react2.default.createElement(
-	    "div",
-	    { className: "well" },
+	    'div',
+	    { className: 'well' },
 	    _react2.default.createElement(
-	      "form",
-	      { className: "form-horizontal", onSubmit: props.handleSubmit },
+	      'form',
+	      { className: 'form-horizontal', onSubmit: props.handleSubmit },
 	      _react2.default.createElement(
-	        "fieldset",
+	        'fieldset',
 	        null,
 	        _react2.default.createElement(
-	          "legend",
+	          'legend',
 	          null,
-	          "New Mouse"
+	          'New Mouse'
 	        ),
 	        _react2.default.createElement(
-	          "div",
-	          { className: "form-group" },
+	          'div',
+	          { className: 'form-group' },
 	          _react2.default.createElement(
-	            "label",
-	            { className: "col-xs-2 control-label" },
-	            "Gender"
+	            'label',
+	            { className: 'col-xs-2 control-label' },
+	            'Gender'
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "col-xs-10" },
-	            _react2.default.createElement("input", {
-	              className: "form-control",
-	              type: "radio",
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              className: 'form-control',
+	              type: 'radio',
 	              checked: props.genderText === 'male',
-	              value: "male",
+	              value: 'male',
 	              onChange: props.handleGenderChange
 	            }),
-	            " Male",
-	            _react2.default.createElement("input", {
-	              className: "form-control",
-	              type: "radio",
+	            ' Male',
+	            _react2.default.createElement('input', {
+	              className: 'form-control',
+	              type: 'radio',
 	              onChange: props.handleGenderChange,
 	              checked: props.genderText === 'female',
-	              value: "female"
+	              value: 'female'
 	            }),
-	            " Female"
+	            ' Female'
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "div",
-	          { className: "form-group" },
+	          'div',
+	          { className: 'form-group' },
 	          _react2.default.createElement(
-	            "label",
-	            { className: "col-xs-2 control-label" },
-	            "Genotype"
+	            'label',
+	            { className: 'col-xs-2 control-label' },
+	            'Genotype'
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "col-xs-10" },
-	            _react2.default.createElement("input", {
-	              className: "form-control",
-	              type: "text",
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              className: 'form-control',
+	              type: 'text',
 	              onChange: props.handleGenotypeChange,
 	              value: props.genotypeText
 	            })
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "div",
-	          { className: "form-group" },
+	          'div',
+	          { className: 'form-group' },
 	          _react2.default.createElement(
-	            "label",
-	            { className: "col-xs-2 control-label" },
-	            "Date of Birth"
+	            'label',
+	            { className: 'col-xs-2 control-label' },
+	            'Date of Birth'
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "col-xs-10" },
-	            _react2.default.createElement("input", {
-	              className: "form-control",
-	              type: "date",
+	            'div',
+	            { className: 'col-xs-10' },
+	            _react2.default.createElement('input', {
+	              className: 'form-control',
+	              type: 'date',
 	              value: props.dob,
 	              readOnly: true
 	            })
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "div",
-	          { className: "form-group" },
+	          'div',
+	          { className: 'form-group' },
 	          _react2.default.createElement(
-	            "div",
-	            { className: "col-xs-10 col-xs-offset-2" },
+	            'div',
+	            { className: 'col-xs-10 col-xs-offset-2' },
 	            _react2.default.createElement(
-	              "button",
+	              'button',
 	              {
-	                type: "submit",
-	                className: "btn btn-success",
+	                type: 'submit',
+	                className: 'btn btn-success',
 	                disabled: props.invalid },
-	              "Create Mouse"
-	            )
+	              'Create Mouse'
+	            ),
+	            props.euth ? _react2.default.createElement(_SubmitModalContainer2.default, { genotype: props.genotypeText }) : ''
 	          )
 	        )
 	      )
@@ -49090,6 +49098,10 @@
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _SubmitModalContainer = __webpack_require__(1028);
+	
+	var _SubmitModalContainer2 = _interopRequireDefault(_SubmitModalContainer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -95147,6 +95159,192 @@
 	  children: _react.PropTypes.oneOfType([_react.PropTypes.arrayOf(_react.PropTypes.node), _react.PropTypes.node])
 	}, _temp)) || _class) || _class);
 	exports.default = (0, _generateCategoricalChart2.default)(ComposedChart, [_Line2.default, _Area2.default, _Bar2.default]);
+
+/***/ },
+/* 1026 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(283);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var EuthanizeModal = function (_React$Component) {
+	    _inherits(EuthanizeModal, _React$Component);
+	
+	    function EuthanizeModal(props) {
+	        _classCallCheck(this, EuthanizeModal);
+	
+	        var _this = _possibleConstructorReturn(this, (EuthanizeModal.__proto__ || Object.getPrototypeOf(EuthanizeModal)).call(this, props));
+	
+	        _this.state = {
+	            showModal: true
+	        };
+	        _this.close = _this.close.bind(_this);
+	        return _this;
+	    }
+	
+	    _createClass(EuthanizeModal, [{
+	        key: 'close',
+	        value: function close() {
+	            this.props.changeEuth();
+	            this.setState({ showModal: false });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log(this.props);
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Modal,
+	                    { show: this.state.showModal, onHide: this.close },
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Modal.Header,
+	                        { closeButton: true },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Modal.Title,
+	                            null,
+	                            'Euthanize Alert'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Modal.Body,
+	                        null,
+	                        _react2.default.createElement(
+	                            'h4',
+	                            null,
+	                            'Unable to enroll mouse'
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            'There are currently no experimental arms that require animals of this genotype. You may prune this mouse from the colony.'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Modal.Footer,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Button,
+	                            { onClick: this.close },
+	                            'Close'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return EuthanizeModal;
+	}(_react2.default.Component);
+	
+	exports.default = EuthanizeModal;
+	;
+
+/***/ },
+/* 1027 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.toggleEuthanize = undefined;
+	exports.default = euthReducer;
+	
+	var _axios = __webpack_require__(177);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _reactRouter = __webpack_require__(202);
+	
+	var _constants = __webpack_require__(265);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// ACTION-CREATORS--------------------------------------------------------
+	var toggleEuthanize = exports.toggleEuthanize = function toggleEuthanize() {
+	    return {
+	        type: _constants.TOGGLE_EUTHANIZE
+	    };
+	};
+	
+	// REDUCER --------------------------------------------------------
+	function euthReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case _constants.TOGGLE_EUTHANIZE:
+	            return !state;
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+/* 1028 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(283);
+	
+	var _reactRedux = __webpack_require__(275);
+	
+	var _SubmitModal = __webpack_require__(1026);
+	
+	var _SubmitModal2 = _interopRequireDefault(_SubmitModal);
+	
+	var _euthanize = __webpack_require__(1027);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        euthanize: state.euthanize
+	    };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        changeEuth: function changeEuth() {
+	            var action = (0, _euthanize.toggleEuthanize)();
+	            dispatch(action);
+	        }
+	    };
+	};
+	
+	var SubmitModalContainer = (0, _reactRedux.connect)(null, mapDispatchToProps)(_SubmitModal2.default);
+	exports.default = SubmitModalContainer;
 
 /***/ }
 /******/ ]);
