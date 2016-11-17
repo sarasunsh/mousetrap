@@ -30,12 +30,14 @@ export default class MessageForm extends React.Component {
     }
 
     render(){
-        console.log('messageForm', this.props)
-
         return(
           <div className="messageForm">
               <form onSubmit={this.handleSubmit} >
-                  <input onChange={this.changeHandler} value={this.state.text}/>
+                  <input
+                    onChange={this.changeHandler}
+                    value={this.state.text}
+                    placeholder='Type message here...'
+                />
               </form>
           </div>
         )

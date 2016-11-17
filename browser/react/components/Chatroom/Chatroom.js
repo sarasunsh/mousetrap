@@ -2,6 +2,7 @@ import React from 'react';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 import UsersList from './UsersList';
+import ChangeNameForm from './ChangeNameForm';
 
 import { Col, Panel } from 'react-bootstrap';
 
@@ -22,6 +23,8 @@ export default class Chatroom extends React.Component {
         this.messageReceive = this.messageReceive.bind(this);
         this.userJoined = this.userJoined.bind(this);
         this.userLeft = this.userLeft.bind(this);
+        this.userChangedName = this.userChangedName.bind(this);
+        this.handleChangeName = this.handleChangeName.bind(this);
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
     }
 
@@ -30,13 +33,12 @@ export default class Chatroom extends React.Component {
         socket.on('newMsg', this.messageReceive)
         socket.on('user:join', this.userJoined);
         socket.on('user:left', this.userLeft);
-        // socket.on('change:name', this._userChangedName);
+        socket.on('change:name', this.userChangedName);
     }
 
     initialize(data) {
         const {users, name} = data;
         this.setState({users, user: name});
-        console.log(this.state)
     }
 
      // Push the incoming message into the messages array and refresh the state variables
@@ -69,12 +71,34 @@ export default class Chatroom extends React.Component {
         this.setState({users, messages});
     }
 
+    userChangedName(data) {
+        var {oldName, newName} = data;
+        var {users, messages} = this.state;
+        var index = users.indexOf(oldName);
+        users.splice(index, 1, newName);
+        messages.push({
+            user: 'CHATBOT',
+            text : oldName+' has changed their name to '+ newName
+        });
+        this.setState({users, messages});
+    }
+
     // Push the message to the server using socket emit
     handleMessageSubmit(message){
         const {messages} = this.state;
         messages.push(message);
         this.setState({messages});
         socket.emit('send:message', message);
+    }
+
+    handleChangeName(newName) {
+        const oldName = this.state.user;
+        socket.emit('change:name', newName)
+        let {users} = this.state;
+        const index = users.indexOf(oldName);
+        users.splice(index, 1, newName);
+        this.setState({users, user: newName});
+
     }
 
     render () {
@@ -101,6 +125,7 @@ export default class Chatroom extends React.Component {
                             users={this.state.users}
                             user={this.state.user}
                         />
+                        <ChangeNameForm changeClick={this.handleChangeName} />
                     </Panel>
 
                 </Col>

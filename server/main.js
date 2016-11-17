@@ -37,6 +37,13 @@ const connectSocket = function() {
             socket.broadcast.emit('newMsg', msg)
         });
 
+        // user changed their name
+        socket.on('change:name', function(newName){
+            socket.broadcast.emit('change:name', {oldName: newUser, newName: newName})
+            const index = userArr.indexOf(newUser);
+            userArr.splice(index, 1, newName);
+        });
+
         // let other users know once a user has left
         socket.on('disconnect', function () {
             userArr = userArr.filter(name => name !== newUser);

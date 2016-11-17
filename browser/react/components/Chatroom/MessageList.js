@@ -35,4 +35,3 @@ export default class MessageList extends React.Component {
     }
 };
 
-
