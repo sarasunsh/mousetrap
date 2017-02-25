@@ -1,9 +1,0 @@
-Algorithm
-
-What arms are left with vacancies that need this genotype?
-
-
-
-For each of these arms:
-- are less than half of the mice in that arm from the same litter?
-- is it gender balanced?
